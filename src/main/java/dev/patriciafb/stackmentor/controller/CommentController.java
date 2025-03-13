@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/comments")
-@CrossOrigin(origins = "http://localhost:5173") // Ajusta el puerto del frontend
 public class CommentController {
     
     private final CommentService commentService;
@@ -22,13 +21,24 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    // 🟢 Obtener comentarios de un recurso
+    // Obtener comentarios de un recurso
     @GetMapping("/resource/{resourceId}")
-    public ResponseEntity<List<Comment>> getComments(@PathVariable Long resourceId) {
-        return ResponseEntity.ok(commentService.getCommentsByResource(resourceId));
-    }
+public ResponseEntity<List<Map<String, Object>>> getComments(@PathVariable Long resourceId) {
+    List<Comment> comments = commentService.getCommentsByResource(resourceId);
 
-    // 🟢 Agregar un comentario
+    List<Map<String, Object>> response = comments.stream().map(comment -> Map.of(
+        "id", comment.getId(),
+        "content", comment.getContent(),
+        "user", Map.of(
+            "id", comment.getUser().getId(),
+            "name", comment.getUser().getName() // 🔥 Ahora enviamos el usuario
+        )
+    )).toList();
+
+    return ResponseEntity.ok(response);
+}
+
+    // Agregar un comentario
     @PostMapping
 public ResponseEntity<?> addComment(@RequestBody Map<String, String> requestData) {
     System.out.println("📩 Datos recibidos: " + requestData);
@@ -57,14 +67,14 @@ public ResponseEntity<?> addComment(@RequestBody Map<String, String> requestData
     
 
 
-    // 🟠 Editar comentario (solo si es del usuario)
+    // Editar comentario (solo si es del usuario)
     @PutMapping("/{commentId}")
     public ResponseEntity<?> updateComment(@PathVariable Long commentId, @RequestParam String userEmail, @RequestParam String newContent) {
         Optional<Comment> comment = commentService.updateComment(commentId, userEmail, newContent);
         return comment.isPresent() ? ResponseEntity.ok(comment.get()) : ResponseEntity.badRequest().body("No autorizado para editar este comentario.");
     }
 
-    // 🔴 Eliminar comentario (solo si es del usuario)
+    // Eliminar comentario (solo si es del usuario)
     @DeleteMapping("/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable Long commentId, @RequestParam String userEmail) {
         return commentService.deleteComment(commentId, userEmail) ? 
