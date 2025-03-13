@@ -7,26 +7,29 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-    
-    private UserRepository userRepository;
-    public User register(User user) {
-        if (userRepository.existsByUsername(user.getUsername())) {
-            throw new RuntimeException("El nombre de usuario ya existe");
-        }
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("El correo electrónico ya está en uso");
-        }
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public User registerUser(User user) {
+        userRepository.findByEmail(user.getEmail())
+            .ifPresent(existing -> {
+                throw new RuntimeException("El Usuario ya está registrado");
+            });
         return userRepository.save(user);
     }
-    public User login(String email, String password) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
-        if (!userOptional.isPresent()) {
-            return null; // Credenciales inválidas
-        }
-        User user = userOptional.get();
-        if (!user.getPassword().equals(password)) { // Comparación básica
-            return null; // Contraseña incorrecta
-        }
-        return user;
+    
+
+    public Optional<User> logginUser(String email, String password) {
+        return userRepository.findByEmail(email)
+                .filter(user -> user.getPassword().equals(password));
+
     }
+
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
 }
