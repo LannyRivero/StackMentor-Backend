@@ -3,6 +3,7 @@ package dev.patriciafb.stackmentor.models;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 @Entity
+@Table(name = "comments")
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
