@@ -1,5 +1,8 @@
 package dev.patriciafb.stackmentor.controllers;
 
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,28 +11,50 @@ import dev.patriciafb.stackmentor.services.UserService;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+
 public class UserController {
+    private final UserService userService;
 
-    private UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
-    // Registro de usuario
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) {
+    public ResponseEntity<?> registerUser(@RequestBody User user) {
         try {
-            userService.register(user);
-            return ResponseEntity.status(201).body("Usuario registrado exitosamente");
+            User registeredUser = userService.registerUser(user);
+
+            if (registeredUser != null) {
+                return ResponseEntity.ok(registeredUser);
+            } else {
+                return ResponseEntity.badRequest().body("No se pudo registrar el usuario.");
+            }
         } catch (Exception e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(500).body("Error interno del servidor: " + e.getMessage());
         }
     }
 
-    // Inicio de sesión
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody User user) {
-        User loggedInUser = userService.login(user.getEmail(), user.getPassword());
-        if (loggedInUser == null) {
-            return ResponseEntity.status(401).body(null); // Credenciales inválidas
+    public ResponseEntity<?> loginUser(@RequestBody User user) {
+        Optional<User> loggedInUser = userService.logginUser(user.getEmail(), user.getPassword());
+
+        if (loggedInUser.isPresent()) {
+            return ResponseEntity.ok(loggedInUser.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
         }
-        return ResponseEntity.ok(loggedInUser);
     }
+
+    @GetMapping("/current-user")
+    public ResponseEntity<?> getCurrentUser(@RequestParam String email) {
+        Optional<User> user = userService.getUserByEmail(email);
+
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+        }
+    }
+
 }
