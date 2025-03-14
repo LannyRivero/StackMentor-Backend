@@ -26,13 +26,13 @@ public class ResourceService {
         resource.setCategory(category);
         resource.setSubcategory(subcategory);
 
-        // Generar URL de acceso al archivo
-        if (url == null || url.isEmpty() && file != null) {
-            url = "http://localhost:8080/api/resources/file/" + (resource.getId() != null ? resource.getId() : "new-file");
+        
+        if ((url == null || url.isEmpty()) && file != null) {
+            url = null; 
         }
         resource.setUrl(url);
 
-        // Guardar el archivo en la base de datos si se proporciona
+      
         if (file != null && !file.isEmpty()) {
             resource.setFileName(file.getOriginalFilename());
             resource.setFileType(file.getContentType());

@@ -46,7 +46,6 @@ public class ResourceController {
         return ResponseEntity.ok(resourceService.getResources(category, subcategory));
     }
 
-    // Devolver archivo como BINARIO visualizar en el navegador
     @GetMapping("/file/name/{fileName}")
     public ResponseEntity<byte[]> viewFile(@PathVariable String fileName) {
         Optional<Resource> resourceOptional = resourceService.getResourceByFileName(fileName);
@@ -59,7 +58,6 @@ public class ResourceController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
             }
 
-            // Configurar encabezados para mostrar el archivo en el navegador
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.parseMediaType(resource.getFileType()));
             headers.setContentDisposition(ContentDisposition.inline().filename(resource.getFileName()).build());
@@ -72,7 +70,6 @@ public class ResourceController {
         }
     }
 
-    // Devolver archivo como JSON con Base64 POR ID
     @GetMapping("/file/json/id/{id}")
     public ResponseEntity<Map<String, String>> getFileAsJson(@PathVariable Long id) {
         Optional<Resource> resourceOptional = resourceService.getResourceById(id);
@@ -85,10 +82,8 @@ public class ResourceController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
             }
 
-            // Convertir archivo binario a Base64
             String base64File = Base64.getEncoder().encodeToString(fileData);
 
-            // Crear JSON con metadatos
             Map<String, String> response = new HashMap<>();
             response.put("fileName", resource.getFileName());
             response.put("fileType",
@@ -101,7 +96,6 @@ public class ResourceController {
         }
     }
 
-    // Devolver archivo como JSON con Base64 POR NOMBRE para descargarlo
     @GetMapping("/file/json/name/{fileName}")
     public ResponseEntity<Map<String, String>> viewFileAsJson(@PathVariable String fileName) {
         Optional<Resource> resourceOptional = resourceService.getResourceByFileName(fileName);
@@ -114,10 +108,8 @@ public class ResourceController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
             }
 
-            // Convertir archivo a Base64
             String base64File = Base64.getEncoder().encodeToString(fileData);
 
-            // Crear JSON con metadatos del archivo
             Map<String, String> response = new HashMap<>();
             response.put("fileName", resource.getFileName());
             response.put("fileType",
