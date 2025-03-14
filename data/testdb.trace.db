@@ -4533,3 +4533,15 @@ Caused by: org.h2.mvstore.MVStoreException: The file is locked: C:/Users/melok/D
 	at org.h2.mvstore.SingleFileStore.open(SingleFileStore.java:81)
 	at org.h2.mvstore.MVStore.<init>(MVStore.java:286)
 	... 137 more
+2025-03-14 16:05:47.239381+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "[*]USERS"; se esperaba "UPDATE"
+Syntax error in SQL statement "[*]USERS"; expected "UPDATE"; SQL statement:
+USERS [42001-232]
+2025-03-14 17:26:31.139893+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "RESORCES" no encontrada
+Table "RESORCES" not found; SQL statement:
+DROP TABLE RESORCES [42102-232]
+2025-03-14 17:27:00.219591+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "USRES" no encontrada
+Table "USRES" not found; SQL statement:
+DROP TABLE USRES [42102-232]
