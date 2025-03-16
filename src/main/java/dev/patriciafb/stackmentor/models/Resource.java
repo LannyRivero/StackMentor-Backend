@@ -10,18 +10,18 @@ public class Resource {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    private String description; 
-    private String category; 
-    private String subcategory; 
+    private String description;
+    private String category;
+    private String subcategory;
 
-    @Column(nullable = true) 
-    private String url; 
+    @Column(nullable = true)
+    private String url;
 
-    @Lob 
+    @Lob
     private byte[] fileData;
 
-    private String fileType; 
-    private String fileName; 
+    private String fileType;
+    private String fileName;
 
     @ManyToOne
     @JoinColumn(name = "uploader_id")
@@ -30,13 +30,13 @@ public class Resource {
     @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
-    
     private String type;
 
-    
-    public Resource() {}
+    public Resource() {
+    }
 
-    public Resource(String title, String description, String category, String subcategory, String type, String url, byte[] fileData, String fileType, String fileName, User uploader) {
+    public Resource(String title, String description, String category, String subcategory, String type, String url,
+            byte[] fileData, String fileType, String fileName, User uploader) {
         this.title = title;
         this.description = description;
         this.category = category;
@@ -49,7 +49,6 @@ public class Resource {
         this.uploader = uploader;
     }
 
-    // Getters y Setters
     public Long getId() {
         return id;
     }

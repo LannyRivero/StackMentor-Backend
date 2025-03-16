@@ -3,8 +3,11 @@ package dev.patriciafb.stackmentor.models;
 import jakarta.persistence.*;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "users")
+@JsonIgnoreProperties({"resources", "hibernateLazyInitializer", "handler"}) 
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

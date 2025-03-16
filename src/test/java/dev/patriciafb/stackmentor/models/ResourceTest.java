@@ -14,7 +14,7 @@ class ResourceTest {
 
     @BeforeEach
     void setUp() {
-        
+
         User mockUploader = new User("test", "test@example.com", "password123");
         resource = new Resource(
                 "Test Resource",
@@ -26,11 +26,9 @@ class ResourceTest {
                 null,
                 null,
                 null,
-                mockUploader
-        );
+                mockUploader);
     }
 
-   
     @Test
     void testDefaultConstructor() {
         Resource defaultResource = new Resource();
@@ -49,7 +47,6 @@ class ResourceTest {
         assertNull(defaultResource.getComments());
     }
 
-   
     @Test
     void testParameterizedConstructor() {
         assertNotNull(resource);
@@ -65,7 +62,6 @@ class ResourceTest {
         assertNotNull(resource.getUploader());
     }
 
-   
     @Test
     void testGettersAndSetters() {
         resource.setId(1L);
@@ -74,8 +70,8 @@ class ResourceTest {
         resource.setCategory("BACKEND");
         resource.setSubcategory("FRAMEWORKS");
         resource.setType("FILE");
-        resource.setUrl(null); 
-        resource.setFileData(new byte[]{1, 2, 3});
+        resource.setUrl(null);
+        resource.setFileData(new byte[] { 1, 2, 3 });
         resource.setFileType("application/pdf");
         resource.setFileName("file.pdf");
 
@@ -85,13 +81,12 @@ class ResourceTest {
         assertEquals("BACKEND", resource.getCategory());
         assertEquals("FRAMEWORKS", resource.getSubcategory());
         assertEquals("FILE", resource.getType());
-        assertNull(resource.getUrl()); 
-        assertArrayEquals(new byte[]{1, 2, 3}, resource.getFileData());
+        assertNull(resource.getUrl());
+        assertArrayEquals(new byte[] { 1, 2, 3 }, resource.getFileData());
         assertEquals("application/pdf", resource.getFileType());
         assertEquals("file.pdf", resource.getFileName());
     }
 
-   
     @Test
     void testUploaderRelation() {
         User mockUploader = new User("test", "test@example.com", "password123");
@@ -101,7 +96,6 @@ class ResourceTest {
         assertEquals("test@example.com", resource.getUploader().getEmail());
     }
 
-    
     @Test
     void testCommentsRelation() {
         List<Comment> mockComments = new ArrayList<>();
@@ -121,7 +115,6 @@ class ResourceTest {
         }
     }
 
-    
     @Test
     void testToString() {
         resource.setId(1L);
