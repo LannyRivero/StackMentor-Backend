@@ -13,15 +13,18 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+
 class UserControllerTest {
     @Mock
     private UserService userService;
     @InjectMocks
     private UserController userController;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
+
     @Test
     void testRegisterUser_Success() {
         User mockUser = new User("test", "test@example.com", "password123");
@@ -31,6 +34,7 @@ class UserControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("test", ((User) response.getBody()).getUsername());
     }
+
     @Test
     void testRegisterUser_Failure() {
         User mockUser = new User("test", "test@example.com", "password123");
@@ -39,6 +43,7 @@ class UserControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("No se pudo registrar el usuario.", response.getBody());
     }
+
     @Test
     void testLoginUser_Success() {
         User mockUser = new User("test", "test@example.com", "password123");
@@ -49,6 +54,7 @@ class UserControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("test@example.com", ((User) response.getBody()).getEmail());
     }
+
     @Test
     void testLoginUser_Failure() {
         User mockUser = new User("test", "test@example.com", "password123");
@@ -58,6 +64,7 @@ class UserControllerTest {
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
         assertEquals("Credenciales incorrectas", response.getBody());
     }
+
     @Test
     void testGetCurrentUser_Success() {
         User mockUser = new User("test", "test@example.com", "password123");
@@ -67,6 +74,7 @@ class UserControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("test@example.com", ((User) response.getBody()).getEmail());
     }
+
     @Test
     void testGetCurrentUser_Failure() {
         when(userService.getUserByEmail("unknown@example.com")).thenReturn(Optional.empty());

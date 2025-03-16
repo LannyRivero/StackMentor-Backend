@@ -3,8 +3,10 @@ package dev.patriciafb.stackmentor.models;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
 class UserTest {
     private User user;
+
     @BeforeEach
     void setUp() {
         user = new User("test", "test@example.com", "password123");
@@ -40,5 +42,4 @@ class UserTest {
         assertEquals("newPassword", user.getPassword());
     }
 
- }
-
+}
